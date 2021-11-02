@@ -4,6 +4,7 @@ import pandas as pd
 
 
 def db_connector(filepath):
+    print("Initiating connection to database")
     return sqlite3.connect(filepath)
 
 
@@ -31,11 +32,23 @@ def db_reader(conn):
     return message_df, chat_df, handle_df, attachment_df, chat_handle_df, chat_message_df, message_attachment_df
 
 
+def message_cleaner(df):
+    clean_message = df.loc[:, ['ROWID', 'guid', 'text', 'handle_id', 'date', 'date_read', 'date_delivered',
+                               'associated_message_guid']]
+    return clean_message
+
+
+def chat_cleaner(df):
+    clean_chat = df.loc[:, ['ROWID', 'guid', 'chat_identifier', 'display_name']]
+    return clean_chat
+
+
 def main():
     print("Hello World")
-
     message_df, chat_df, handle_df, attachment_df, chat_handle_df, chat_message_df, message_attachment_df = db_reader(
         db_connector("chat.db"))
+    clean_message = message_cleaner(message_df)
+    print(clean_message.head)
 
 
 if __name__ == '__main__':
