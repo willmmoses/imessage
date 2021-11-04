@@ -42,6 +42,11 @@ def chat_cleaner(df):
     clean_chat = df.loc[:, ['ROWID', 'guid', 'chat_identifier', 'display_name']]
     return clean_chat
 
+def handle_cleaner(df):
+    clean_handle = df.loc[:, ['ROWID', 'id', 'guid']]
+    return clean_handle
+
+
 
 def main():
     print("Hello World")
