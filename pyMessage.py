@@ -39,13 +39,23 @@ def message_cleaner(df):
 
 
 def chat_cleaner(df):
-    clean_chat = df.loc[:, ['ROWID', 'guid', 'chat_identifier', 'display_name']]
+    clean_chat = df.loc[:, ['ROWID', 'guid', 'chat_identifier', 'display_name']].rename(columns={'ROWID': 'chat_id'})
     return clean_chat
 
+
 def handle_cleaner(df):
-    clean_handle = df.loc[:, ['ROWID', 'id', 'guid']]
+    clean_handle = df.loc[:, ['ROWID', 'id', 'person_centric_id']].rename(columns={'ROWID': 'handle_id'})
     return clean_handle
 
+
+def chat_handle_merger(chat_df, handle_df, join_df):
+    print('Merging chat and handle tables')
+    merged_df = join_df.join(handle_df.set_index('handle_id'), on='handle_id')
+    merged_df = merged_df.join(chat_df.set_index('chat_id'), on='chat_id')
+    merged_df.rename(columns={'id': 'sender'}, inplace=True)
+    print(merged_df.dtypes)
+    print('Merge complete')
+    return merged_df
 
 
 def main():
@@ -53,7 +63,9 @@ def main():
     message_df, chat_df, handle_df, attachment_df, chat_handle_df, chat_message_df, message_attachment_df = db_reader(
         db_connector("chat.db"))
     clean_message = message_cleaner(message_df)
-    print(clean_message.head)
+    clean_handle = handle_cleaner(handle_df)
+    clean_chat = chat_cleaner(chat_df)
+    chat_handle_merged = chat_handle_merger(clean_chat, clean_handle, chat_handle_df)
 
 
 if __name__ == '__main__':
