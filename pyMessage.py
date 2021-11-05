@@ -34,7 +34,7 @@ def db_reader(conn):
 
 def message_cleaner(df):
     clean_message = df.loc[:, ['ROWID', 'guid', 'text', 'handle_id', 'date', 'date_read', 'date_delivered',
-                               'associated_message_guid']]
+                               'associated_message_guid']].rename(columns={'ROWID': 'message_id'})
     return clean_message
 
 
@@ -57,6 +57,10 @@ def chat_handle_merger(chat_df, handle_df, join_df):
     print('Merge complete')
     return merged_df
 
+
+def chat_message_merger(chat_df, message_df, join_df):
+    print('Merging chat and message tables')
+    merged_df = join_df.join(message_df.set_index('message_id'), on='message_id')
 
 def main():
     print("Hello World")
