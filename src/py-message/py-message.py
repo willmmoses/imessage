@@ -133,7 +133,7 @@ def main():
     Perfunctory main function. Superfluous
     :return: 0 on clean exit
     """
-    loader('chat.db')
+    loader('../../chat.db')
 
 
 if __name__ == '__main__':

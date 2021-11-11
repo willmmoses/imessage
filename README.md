@@ -1,2 +1,2 @@
-# pyMessage
-A python-based program to manipulate iMessages
+# py-message
+A python-based program to export an iMessage database as a pandas dataframe.
